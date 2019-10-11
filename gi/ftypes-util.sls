@@ -4,7 +4,7 @@
   (export
    u8 u8* u8**
    alloc
-   c-functions
+   c-function c-default-function
    bitmap enum
    locate-library-object
    ;; byte/string array handling functions.
@@ -47,15 +47,15 @@
              (foreign-free var) ...
              r)))]))
 
-  ;; [syntax] c-functions: converts scheme-like function names to c-like function names before passing to foreign-procedure.
+  ;; [syntax] c-function: converts scheme-like function names to c-like function names before passing to foreign-procedure.
   ;; ie, word separating hyphens are converted to underscores for c.
   ;; eg,
-  ;; (c-functions (str-length (string) int) ....)
+  ;; (c-function (str-length (string) int) ....)
   ;; is converted to:
   ;; (begin
   ;;   (define str-length (foreign-procedure "str_length" (string) int))
   ;;   ...)
-  (define-syntax c-functions
+  (define-syntax c-function
     (lambda (stx)
       (define string-map
         (lambda (func str)
@@ -76,6 +76,45 @@
             #'(begin
                 (define name
                   (foreign-procedure function-string args return)) ...))])))
+
+  ;; [syntax] c-default-function: define c functions that take a default argument.
+  ;; This behaves like c-function, except it first takes a (type, instance) pair.
+  ;; c-default-function is useful for those c modules that define a bunch of functions that take
+  ;; the same struct as the first argument.
+  ;;
+  ;; The expansion of this definition:
+  ;; (c-default-function (type (current-parameter))
+  ;;   (func-name1 (arg1) int)
+  ;;   ...)
+  ;; will look like:
+  ;; (begin
+  ;;   (define func-name1
+  ;;     (let ([ffi-func (foreign-procedure "func_name1" (type arg1) int)])
+  ;;       (lambda args (apply ffi-func (current-parameter) args))))
+  ;;   ...)
+  (define-syntax c-default-function
+    (lambda (stx)
+      (define string-map
+        (lambda (func str)
+          (list->string (map func (string->list str)))))
+      (define symbol->function-name-string
+        (lambda (sym)
+          (string-map (lambda (c)
+                        (if (eqv? c #\-)
+                            #\_ c))
+                      (symbol->string sym))))
+      (syntax-case stx ()
+        [(_ (type instance) (name (arg ...) return) ...)
+         (with-syntax ([(function-string ...)
+                        (map (lambda (n)
+                               (datum->syntax n
+                                 (symbol->function-name-string (syntax->datum n))))
+                             #'(name ...))])
+            #'(begin
+                (define name
+                  (let ([ffi-func (foreign-procedure function-string (type arg ...) return)])
+                    (lambda args
+                      (apply ffi-func instance args)))) ...))])))
 
   (define-syntax bitmap
     (syntax-rules ()

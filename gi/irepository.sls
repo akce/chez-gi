@@ -10,6 +10,7 @@
   (export
    g-irepository-get-default
    current-irepository
+   g-irepository-get-n-infos
    )
   (import
    (rnrs)
@@ -21,10 +22,13 @@
 
   (define-ftype girepos void*)
 
-  (c-functions
+  (c-function
    (g-irepository-get-default () girepos)
    )
 
   (define current-irepository
     (make-parameter (g-irepository-get-default)))
+
+  (c-default-function (girepos (current-irepository))
+   (g-irepository-get-n-infos (string) int))
   )
