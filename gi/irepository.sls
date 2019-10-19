@@ -14,6 +14,7 @@
    g-irepository-get-immediate-dependencies
    g-irepository-get-loaded-namespaces
    g-irepository-get-n-infos
+   g-irepository-get-info
    g-irepository-get-typelib-path
    g-irepository-is-registered
    g-irepository-require
@@ -26,14 +27,13 @@
    (rnrs)
    (only (chezscheme) foreign-set! make-parameter)
    (gi ftypes-util)
+   (gi base)
    (gi glib))
 
   (define load-library
     (load-shared-object "libgirepository-1.0.so.1"))
 
   (define-ftype girepos void*)
-  (define-ftype gibaseinfo void*)
-  (define-ftype gitypelib void*)
 
   (c-function
    (g-irepository-get-default () girepos)

@@ -5,8 +5,8 @@
    u8 u8* u8**
    alloc
    bzero
-   c-function c-default-function
-   bitmap enum
+   c-function c-default-function c-enum
+   bitmap
    locate-library-object
    ;; byte/string array handling functions.
    u8*->string u8**->string-list u8**->strings/free
@@ -130,15 +130,80 @@
                     (lambda args
                       (apply ffi-func instance args)))) ...))])))
 
+  ;; [syntax] c-enum: creates a function representing the enumeration.
+  ;; c-enum will create a function called 'name'.
+  ;; enum values are assumed to start from 0 and increase by one from the previous value unless a value is provided.
+  ;;
+  ;; Without args, the function will return an assoc list of symbol/value pairs.
+  ;;
+  ;; With one arg, the function will check the type of the arg and return a value accordingly.
+  ;; ie, return an identifier (symbol) when arg is a number, and a number if the arg is a symbol.
+  ;;
+  ;; Error conditions are raised for invalid or unknown input values.
+  ;;
+  ;; eg, a c-style enum
+  ;;    typedef enum { a, b = 3, c, } name;
+  ;;
+  ;; could be represented as:
+  ;; > (c-enum name a (b 3) c)
+  ;; > name
+  ;; #<procedure name>
+  ;; > (name)
+  ;; ((a . 0) (b . 3) (c . 4))
+  ;; > (name 3)
+  ;; b
+  ;; > (name 'c)
+  ;; 4
+  ;; > (name 2)
+  ;; Exception in name: identifier not defined for value 2 in enum
+  ;; Type (debug) to enter the debugger.
+  ;; > (name 'j)
+  ;; Exception in name: value not defined for identifier j in enum
+  ;; Type (debug) to enter the debugger.
+  (define-syntax c-enum
+    (lambda (stx)
+      (syntax-case stx ()
+        [(_ name enumdef1 enumdef* ...)
+         (with-syntax
+          ([((esym eid) ...)
+            (let loop ([i 0] [es #'(enumdef1 enumdef* ...)])
+              (cond
+               [(null? es) '()]
+               [else
+                (syntax-case (car es) ()
+                  [(id val)
+                   (cons (list #'id #'val) (loop (fx+ (syntax->datum #'val) 1) (cdr es)))]
+                  [id
+                   (identifier? #'id)
+                   (cons (list #'id (datum->syntax #'id i)) (loop (fx+ i 1) (cdr es)))])]))])
+          #'(define name
+              (case-lambda
+               [()
+                '((esym . eid) ...)]
+               [(x)
+                (name
+                 (cond
+                  [(symbol? x)	'get-value]
+                  [(number? x)	'get-id]
+                  [else x])
+                 x)]
+               [(cmd arg)
+                (case cmd
+                  [(get-value)
+                   (case arg
+                     [(esym) eid] ...
+                     [else (error (syntax->datum #'name) (format #f "value not defined for identifier ~s in enum" arg))])]
+                  [(get-id)
+                   (case arg
+                     [(eid) 'esym] ...
+                     [else (error (syntax->datum #'name) (format #f "identifier not defined for value ~d in enum" arg))])]
+                  [else
+                   (error (syntax->datum #'name) (format #f "unknown enum command ~s" cmd))])])))])))
+
   (define-syntax bitmap
     (syntax-rules ()
       [(_ name (symbol bit) ...)
        (begin (define symbol (fxsll 1 bit)) ...)]))
-
-  (define-syntax enum
-    (syntax-rules ()
-      [(_ name (symbol value) ...)
-       (begin (define symbol value) ...)]))
 
   ;; [procedure] locate-library-object: find first instance of filename within (library-directories) object directories.
   ;; Returns full path of located file, including the filename itself. filename only if not found.
