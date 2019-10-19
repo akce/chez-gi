@@ -144,7 +144,7 @@
     (lambda (fptr)
       (utf8->string
        (let f ([i 0])
-         (let ([c (foreign-ref 'unsigned-8 fptr i)])
+         (let ([c (ftype-ref unsigned-8 () fptr i)])
            (if (fx= c 0)
              (make-bytevector i)
              (let ([bv (f (fx+ i 1))])
