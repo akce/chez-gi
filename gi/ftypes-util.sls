@@ -4,6 +4,7 @@
   (export
    u8 u8* u8**
    alloc
+   bzero
    c-function c-default-function
    bitmap enum
    locate-library-object
@@ -46,6 +47,26 @@
              (unlock-object var) ...
              (foreign-free var) ...
              r)))]))
+
+  ;; [proc] bzero: clears a chunk of foreign memory.
+  ;; [returns]: none
+  ;; ptr must be a pointer address as returned by foreign-alloc (or similar).
+  ;; sizeof is the memory size in bytes.
+  (define bzero
+    (lambda (ptr sizeof)
+      (let ([isize (foreign-sizeof 'int)])
+        (let loop ([offset 0] [rem sizeof])
+          (cond
+           [(>= rem isize)
+            (foreign-set! 'int ptr offset 0)
+            (loop (fx+ offset isize) (fx- rem isize))]
+           [(fx=? rem 0)
+            ptr]
+           [else
+            (for-each
+             (lambda (i) (foreign-set! 'unsigned-8 ptr (fx+ offset i) 0))
+             (iota rem))
+            ptr])))))
 
   (meta define string-map
         (lambda (func str)
