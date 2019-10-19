@@ -10,6 +10,9 @@
   (export
    g-irepository-get-default
    current-irepository
+   g-irepository-get-dependencies
+   g-irepository-get-immediate-dependencies
+   g-irepository-get-loaded-namespaces
    g-irepository-get-n-infos
    g-irepository-get-typelib-path
    g-irepository-is-registered
@@ -27,8 +30,6 @@
   (define load-library
     (load-shared-object "libgirepository-1.0.so.1"))
 
-  (define-ftype string-list void*)
-
   (define-ftype girepos void*)
   (define-ftype gibaseinfo void*)
   (define-ftype gitypelib void*)
@@ -45,9 +46,9 @@
     (make-parameter (g-irepository-get-default)))
 
   (c-default-function (girepos (current-irepository))
-   (g-irepository-get-dependencies (string) string-list)
-   (g-irepository-get-immediate-dependencies (string) string-list)
-   (g-irepository-get-loaded-namespaces () string-list)
+   (g_irepository_get_dependencies (string) (* u8*))
+   (g_irepository_get_immediate_dependencies (string) (* u8*))
+   (g_irepository_get_loaded_namespaces () (* u8*))
    (g-irepository-get-n-infos (string) int)
    (g-irepository-get-info (string int) gibaseinfo)
    (g-irepository-enumerate-versions (string) (* glist))
@@ -61,6 +62,54 @@
    (g-irepository-get-version (string) string)
    (g-irepository-find-by-gtype (gtype) gibaseinfo)
    )
+
+  ;; [proc] g-irepository-get-dependencies: recursively get all dependencies for namespace.
+  ;; [returns] string list of dependencies, empty list if there are none.
+  ;;
+  ;; Each dependency is a string of format: "<namespace>-<version>".
+  ;;
+  ;; Namespace must be loaded.
+  ;;
+  ;; > (g-irepository-require "Gtk" #f)
+  ;; 94555665748480
+  ;; > (g-irepository-get-dependencies "Gtk")
+  ;; ("xlib-2.0" "GLib-2.0" "Gdk-3.0" "GdkPixbuf-2.0" "cairo-1.0"
+  ;;  "GObject-2.0" "Pango-1.0" "Gio-2.0" "GModule-2.0" "Atk-1.0")
+  ;; > (g-irepository-get-dependencies "GLib")
+  ;; ()
+  (define g-irepository-get-dependencies
+    (lambda (namespace)
+      (let ([slist (g_irepository_get_dependencies namespace)])
+        (u8**->strings/free slist))))
+
+  ;; [proc] g-irepository-get-immediate-dependencies: get immediate dependencies for namespace.
+  ;; [returns] string list of dependencies, empty list if there are none.
+  ;;
+  ;; This is a non-recursive version of g-irepository-get-dependencies.
+  ;;
+  ;; > (g-irepository-require "Gtk" #f)
+  ;; 94555665748480
+  ;; > (g-irepository-get-immediate-dependencies "Gtk")
+  ;; ("xlib-2.0" "Gdk-3.0" "Atk-1.0")
+  (define g-irepository-get-immediate-dependencies
+    (lambda (namespace)
+      (let ([slist (g_irepository_get_immediate_dependencies namespace)])
+        (u8**->strings/free slist))))
+
+  ;; [proc] g-irepository-get-loaded-namespaces: get names of all loaded namespaces.
+  ;; [returns] string list of namespaces, empty list if none are loaded.
+  ;;
+  ;; > (g-irepository-get-loaded-namespaces)
+  ;; ()
+  ;; > (g-irepository-require "Gtk" #f)
+  ;; 94555665748480
+  ;; > (g-irepository-get-loaded-namespaces)
+  ;; ("Gtk" "GdkPixbuf" "GObject" "GModule" "cairo" "GLib" "xlib"
+  ;;  "Atk" "Gio" "Pango" "Gdk")
+  (define g-irepository-get-loaded-namespaces
+    (lambda ()
+      (let ([slist (g_irepository_get_loaded_namespaces)])
+        (u8**->strings/free slist))))
 
   ;; [proc] g-irepository-require: loads type-library identified by namespace/version.
   ;; [returns]: typelib pointer

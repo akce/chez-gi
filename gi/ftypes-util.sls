@@ -9,7 +9,7 @@
    bitmap enum
    locate-library-object
    ;; byte/string array handling functions.
-   u8*->string u8**->string-list
+   u8*->string u8**->string-list u8**->strings/free
    string->u8* string-list->u8**
    free-u8**
    ;; Chez scheme re-exports. Saves client code from having to import these themselves.
@@ -175,6 +175,24 @@
                   (vector-set! v i (u8*->string saddr))
                   v)])
             ((= i nitems) (vector->list v))))))
+
+  ;; [proc] u8**->strings/free: converts ftype (* u8*) to a list of strings, freeing the source memory.
+  ;;
+  ;; This function requires that the strings, and the list of strings, are all NULL terminated.
+  (define u8**->strings/free
+    (lambda (ftype-u8**)
+      (if ftype-u8**
+        (let loop ([i 0])
+          (let* ([sptr (ftype-ref u8* () ftype-u8** i)])
+            (cond
+             [(ftype-pointer-null? sptr)
+              (foreign-free (ftype-pointer-address ftype-u8**))
+              '()]
+             [else
+              (let ([str (u8*->string sptr)])
+                (foreign-free (ftype-pointer-address sptr))
+                (cons str (loop (fx+ i 1))))])))
+        '())))
 
   ;; [proc] return scheme string object as a ftypes u8* memory block.
   (define string->u8*
