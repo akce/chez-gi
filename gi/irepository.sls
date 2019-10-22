@@ -51,7 +51,7 @@
    (g_irepository_get_immediate_dependencies (string) (* u8*))
    (g_irepository_get_loaded_namespaces () (* u8*))
    (g-irepository-get-n-infos (string) int)
-   (g-irepository-get-info (string int) gibaseinfo)
+   (g-irepository-get-info (string int) gibase)
    (g-irepository-enumerate-versions (string) (* glist))
    #;(g-irepository-load-typelib (...) ...)
    (g-irepository-get-typelib-path (string) string)
@@ -61,7 +61,7 @@
    (g-irepository-get-c-prefix (string) string)
    (g-irepository-get-shared-library (string) string)
    (g-irepository-get-version (string) string)
-   (g-irepository-find-by-gtype (gtype) gibaseinfo)
+   (g-irepository-find-by-gtype (gtype) gibase)
    )
 
   ;; [proc] g-irepository-get-dependencies: recursively get all dependencies for namespace.

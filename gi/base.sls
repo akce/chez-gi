@@ -7,7 +7,7 @@
 
 (library (gi base)
   (export
-   gibaseinfo gitypelib GIInfoType
+   gibase gitypelib GIInfoType
    g-base-info-ref
    g-base-info-unref
    g-base-info-equal
@@ -24,7 +24,7 @@
   (define load-library
     (load-shared-object "libgirepository-1.0.so.1"))
 
-  (define-ftype gibaseinfo void*)
+  (define-ftype gibase void*)
   (define-ftype gitypelib void*)
 
   (c-enum GIInfoType
@@ -32,15 +32,15 @@
     INVALID_0 UNION VALUE SIGNAL VFUNC PROPERTY FIELD ARG TYPE UNRESOLVED)
 
   (c-function
-   (g-base-info-ref (gibaseinfo) gibaseinfo)
-   (g-base-info-unref (gibaseinfo) void)
-   (g-base-info-equal (gibaseinfo gibaseinfo) boolean)
-   (g_base_info_get_type (gibaseinfo) int)
-   (g-base-info-get-typelib (gibaseinfo) gitypelib)
-   (g-base-info-get-namespace (gibaseinfo) string)
-   (g-base-info-get-name (gibaseinfo) string)
-   (g-base-info-is-deprecated (gibaseinfo) boolean)
-   (g-info-type-to-string (gibaseinfo) string))
+   (g-base-info-ref (gibase) gibase)
+   (g-base-info-unref (gibase) void)
+   (g-base-info-equal (gibase gibase) boolean)
+   (g_base_info_get_type (gibase) int)
+   (g-base-info-get-typelib (gibase) gitypelib)
+   (g-base-info-get-namespace (gibase) string)
+   (g-base-info-get-name (gibase) string)
+   (g-base-info-is-deprecated (gibase) boolean)
+   (g-info-type-to-string (gibase) string))
 
   (define g-base-info-get-type
     (lambda (bi)
