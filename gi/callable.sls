@@ -7,7 +7,7 @@
 ;; SPDX-License-Identifier: Unlicense
 (library (gi callable)
   (export
-   gicallable
+   gicallable gifunction gisignal givfunc
    g-callable-info-can-throw-gerror
    g-callable-info-get-n-args
    g-callable-info-get-arg
@@ -29,6 +29,12 @@
     (load-shared-object "libgirepository-1.0.so.1"))
 
   (define-ftype gicallable void*)
+  ;; Both function and vfunc refer to each other, so define their types here to avoid a circular dependency.
+  ;; Also define any other callable subtypes here for consistency. ie, callback & signal.
+  (define-ftype gicallback gicallable)
+  (define-ftype gifunction gicallable)
+  (define-ftype gisignal gicallable)
+  (define-ftype givfunc gicallable)
 
   (c-function
    (g-callable-info-can-throw-gerror (gicallable) boolean)
