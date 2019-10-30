@@ -1,14 +1,24 @@
-Chez support for GObject Introspection.
+# Chez GObject Introspection
 
-https://gi.readthedocs.io/en/latest/
+## About
 
-Installed typelibs:
-/usr/lib/girepository-1.0
+Generate static Chez scheme bindings for libraries that support GObject Introspection.
 
-GObject based libraries generate a binary typelib definition file.
+Generated bindings will include a Makefile to compile and install to a library directory.
 
-Language bindings parse typelib (maybe via libgirepository) to access underlying gobject based shared library.
+## Status
+
+Manual bindings have been written for libgirepostiory.
+
+Next up, write the program to convert typelib info to Chez scheme libraries and Makefile.
+
+## Misc refs
 
 API:
-
 https://developer.gnome.org/gi/stable/
+
+High level overview:
+https://gi.readthedocs.io/en/latest/
+
+Installed typelibs location (on my machine):
+/usr/lib/girepository-1.0
