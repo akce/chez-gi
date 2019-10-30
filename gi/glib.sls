@@ -21,7 +21,14 @@
      [code	int]
      [message	u8*]))
   (define-ftype gerror* (* gerror))
-  (define-ftype gtype int)
+
+  ;; GType (typedef gsize) defined in:
+  ;; /usr/include/glib-2.0/gobject/gtype.h
+  ;; and documented at:
+  ;; https://developer.gnome.org/gobject/stable/gobject-Type-Information.html#GType
+  ;; gsize (typedef size_t/ulong) documented at:
+  ;; https://developer.gnome.org/glib/stable/glib-Basic-Types.html#gsize
+  (define-ftype gtype size_t)
 
   (define-ftype glist
     (struct
