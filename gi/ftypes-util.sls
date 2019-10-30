@@ -2,6 +2,7 @@
 ;; Copyright (c) 2019 Akce.
 (library (gi ftypes-util)
   (export
+   lso
    u8 u8* u8**
    alloc
    bzero
@@ -17,6 +18,11 @@
    ftype-pointer-address ftype-&ref ftype-ref ftype-set! ftype-sizeof load-shared-object)
   (import
    (chezscheme))
+
+  ;; Common load library function for all sub libraries.
+  (define lso
+    (lambda ()
+      (load-shared-object "libgirepository-1.0.so.1")))
 
   (define-ftype u8 unsigned-8)
   (define-ftype u8* (* u8))

@@ -15,7 +15,7 @@
    (gi ftypes-util))
 
   (define load-library
-    (load-shared-object "libgirepository-1.0.so.1"))
+    (lso))
 
   ;; Note: purposefully dropping the IS_ prefix.
   (c-enum GIFunctionFlags METHOD CONSTRUCTOR GETTER SETTER WRAPS_VFUNC THROWS)

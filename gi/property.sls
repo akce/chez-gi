@@ -15,7 +15,7 @@
    (gi ftypes-util))
 
   (define load-library
-    (load-shared-object "libgirepository-1.0.so.1"))
+    (lso))
 
   (define-ftype giproperty void*)
 

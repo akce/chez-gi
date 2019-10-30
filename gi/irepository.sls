@@ -31,7 +31,7 @@
    (gi glib))
 
   (define load-library
-    (load-shared-object "libgirepository-1.0.so.1"))
+    (lso))
 
   (define-ftype girepos void*)
 

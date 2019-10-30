@@ -13,7 +13,7 @@
    (gi ftypes-util))
 
   (define load-library
-    (load-shared-object "libgirepository-1.0.so.1"))
+    (lso))
 
   ;; Note: should be declared in glib, but doing here for convenience.
   (c-enum GSignalFlags RUN_FIRST RUN_LAST RUN_CLEANUP NO_RECURSE DETAILED ACTION NO_HOOKS MUST_COLLECT DEPRECATED)
