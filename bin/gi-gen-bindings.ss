@@ -20,7 +20,10 @@
 
 (define print-deps
   (lambda ()
-    (format #t "~a -> ~a~n" (lib-name) (sort string<? (g-irepository-get-dependencies (lib-name))))))
+    (format #t "~a-~a depends on: ~a~n"
+            (lib-name)
+            (if (lib-version) (lib-version) (g-irepository-get-version (lib-name)))
+            (sort string<? (g-irepository-get-dependencies (lib-name))))))
 
 ;; Get all the gibase structs for lib-name.
 (define get-all-infos
@@ -44,18 +47,35 @@
   (lambda (sym lst)
     (filter (lambda (x) (eq? sym (g-base-info-get-type x))) lst)))
 
+(define names
+  (lambda (lst)
+    (map g-base-info-get-name lst)))
+
+(define types
+  (lambda (lst)
+    (map g-base-info-get-type lst)))
+
 (let ([args (command-line-arguments)])
-  (if (null? args)
-    (begin
-      (print-usage)
-      (exit 1)))
+  (when (null? args)
+    (print-usage)
+    (exit 1))
   (lib-name (car args))
   (lib-version (args-version args)))
+
 (g-irepository-require (lib-name) (lib-version))
-(unless (lib-version)
-  (format #t "loaded version ~a~n" (g-irepository-get-version (lib-name))))
 (print-deps)
 ;; Create some debug test vars here.
 (define infos (get-all-infos))
+;; consts: (list (name-string value) ...)
 (define consts (map (lambda (x) (list (g-base-info-get-name x) (g-constant-get-value x))) (type-filter 'CONSTANT infos)))
+;; todos: a list of infos that aren't handled yet.
+(define todos
+  (filter
+   (lambda (x)
+     (case (g-base-info-get-type x)
+       ;; Add supported types here.
+       [(CONSTANT) #f]
+       ;; Unsupported..
+       [else x]))
+   infos))
 (new-cafe)
