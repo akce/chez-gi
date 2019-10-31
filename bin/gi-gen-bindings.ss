@@ -55,6 +55,18 @@
   (lambda (lst)
     (map g-base-info-get-type lst)))
 
+;; enums: (list enum-name-str (value-name-str . value-int) ...)
+(define enum-values
+  (lambda (gia)
+    (let ([en (g-enum-info-get-n-values gia)])
+      (let ([vis (map
+                  (lambda (i)
+                    (g-enum-info-get-value gia i))
+                  (iota en))])
+        (let ([vals (map (lambda (x) (cons (g-base-info-get-name x) (g-value-info-get-value x))) vis)])
+          (for-each g-base-info-unref vis)
+          vals)))))
+
 (let ([args (command-line-arguments)])
   (when (null? args)
     (print-usage)
@@ -68,13 +80,18 @@
 (define infos (get-all-infos))
 ;; consts: (list (name-string value) ...)
 (define consts (map (lambda (x) (list (g-base-info-get-name x) (g-constant-get-value x))) (type-filter 'CONSTANT infos)))
+(define enums (map
+               (lambda (x)
+                 (list (g-base-info-get-name x) (enum-values x)
+                       #;(map cons (enum-method-names x) (enum-values x))))
+               (type-filter 'ENUM infos)))
 ;; todos: a list of infos that aren't handled yet.
 (define todos
   (filter
    (lambda (x)
      (case (g-base-info-get-type x)
        ;; Add supported types here.
-       [(CONSTANT) #f]
+       [(CONSTANT ENUM) #f]
        ;; Unsupported..
        [else x]))
    infos))
