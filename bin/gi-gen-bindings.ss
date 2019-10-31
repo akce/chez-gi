@@ -80,18 +80,22 @@
 (define infos (get-all-infos))
 ;; consts: (list (name-string value) ...)
 (define consts (map (lambda (x) (list (g-base-info-get-name x) (g-constant-get-value x))) (type-filter 'CONSTANT infos)))
-(define enums (map
-               (lambda (x)
-                 (list (g-base-info-get-name x) (enum-values x)
-                       #;(map cons (enum-method-names x) (enum-values x))))
-               (type-filter 'ENUM infos)))
+(define def-enum
+  (lambda (lst)
+    (map
+     (lambda (x)
+       (list (g-base-info-get-name x) (enum-values x)))
+     lst)))
+(define enums (def-enum (type-filter 'ENUM infos)))
+;; Flags appear to be enums, but the value is the left shift amount. ie, 1 << value.
+(define flags (def-enum (type-filter 'FLAGS infos)))
 ;; todos: a list of infos that aren't handled yet.
 (define todos
   (filter
    (lambda (x)
      (case (g-base-info-get-type x)
        ;; Add supported types here.
-       [(CONSTANT ENUM) #f]
+       [(CONSTANT ENUM FLAGS) #f]
        ;; Unsupported..
        [else x]))
    infos))
