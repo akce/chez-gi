@@ -18,7 +18,7 @@
     (lso))
 
   ;; Note: purposefully dropping the IS_ prefix.
-  (c-enum GIFunctionFlags METHOD CONSTRUCTOR GETTER SETTER WRAPS_VFUNC THROWS)
+  (c-bitmap GIFunctionFlags METHOD CONSTRUCTOR GETTER SETTER WRAPS_VFUNC THROWS)
 
   (c-function
    (g_function_info_get_flags (gifunction) int)

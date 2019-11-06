@@ -21,7 +21,7 @@
 
   ;; GParamFlags are a part of GObject GParamSpec but define here for convenience.
   ;; https://developer.gnome.org/gobject/stable/gobject-GParamSpec.html#GParamFlags
-  (c-enum GParamFlags
+  (c-bitmap GParamFlags
     READABLE WRITABLE READWRITE CONSTRUCT CONSTRUCT_ONLY LAX_VALIDATION STATIC_NAME STATIC_NICK
     STATIC_BLURB EXPLICIT_NOTIFY DEPRECATED)
 

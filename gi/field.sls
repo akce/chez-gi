@@ -23,7 +23,7 @@
   (define-ftype gifield void*)
 
   ;; Dropping the IS_ prefix for value symbols.
-  (c-enum GIFieldInfoFlags READABLE WRITABLE)
+  (c-bitmap GIFieldInfoFlags READABLE WRITABLE)
 
   (c-function
    (g-field-info-get-field (gifield void* giarg) boolean)

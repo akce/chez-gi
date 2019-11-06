@@ -19,7 +19,7 @@
   (define load-library
     (lso))
 
-  (c-enum GIVFuncFlags MUST_CHAIN_UP MUST_OVERRIDE MUST_NOT_OVERRIDE THROWS)
+  (c-bitmap GIVFuncFlags MUST_CHAIN_UP MUST_OVERRIDE MUST_NOT_OVERRIDE THROWS)
 
   (c-function
    (g_vfunc_info_get_flags (givfunc) int)
