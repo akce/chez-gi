@@ -100,18 +100,36 @@
      (g-field-info-get-size ptr)
      (make (g-field-info-get-type ptr)))))
 
+(define make-interface
+  (lambda (ptr)
+    (assert (eq? 'INTERFACE (g-base-info-get-type ptr)))
+    (list
+     (g-base-info-get-type ptr)
+     (g-base-info-get-name ptr)
+     (get-n ptr g-interface-info-get-n-prerequisites g-interface-info-get-prerequisite)
+     (get-n ptr g-interface-info-get-n-properties g-interface-info-get-property)
+     (get-n ptr g-interface-info-get-n-methods g-interface-info-get-method)
+     (get-n ptr g-interface-info-get-n-signals g-interface-info-get-signal)
+     (get-n ptr g-interface-info-get-n-vfuncs g-interface-info-get-vfunc)
+     (get-n ptr g-interface-info-get-n-constants g-interface-info-get-constant)
+     (let ([sptr (g-interface-info-get-iface-struct ptr)])
+       (if (fx=? sptr 0)
+         '()
+         (make sptr))))))
+
 (define make-type
   (lambda (ptr)
     (assert (eq? 'TYPE (g-base-info-get-type ptr)))
     (list
      (g-base-info-get-type ptr)
      (g-base-info-get-name ptr)
-     (g-type-info-get-tag ptr)		; Does this differ from the base type tag?
+     (g-type-info-get-tag ptr)		; The actual type that this TYPE record contains.
      (g-type-info-pointer? ptr)
      (case (g-type-info-get-tag ptr)
        [(INTERFACE)
         ;; TODO "make" -> make-interface
-        (list (g-type-info-get-interface ptr))]
+        ;; TODO using make exhausts memory (cyclic ref?) so leave till i understand what an interface is..
+        (make-unhandled (g-type-info-get-interface ptr))]
        [ARRAY
         (append
          (list (g-type-info-get-array-type ptr))
@@ -139,8 +157,10 @@
     (list
      'TODO
      (g-base-info-get-type ptr)
+     (g-base-info-get-name ptr)
      ptr)))
 
+;; TODO handle circular refs.
 (define make
   (lambda (ptr)
     ((get-factory-func ptr) ptr)))
@@ -151,6 +171,7 @@
       [(CONSTANT)	make-const]
       [(ENUM FLAGS)	make-enum-flags]
       [(FIELD)		make-field]
+      [(INTERFACE)	make-interface]
       [(STRUCT)		make-struct]
       [(TYPE)		make-type]
       [(VALUE)		make-value]
@@ -170,6 +191,7 @@
 (define consts (type-filter 'CONSTANT records))
 (define enums (type-filter 'ENUM records))
 (define flags (type-filter 'FLAGS records))
+(define interfaces (type-filter 'INTERFACE records))
 (define structs (type-filter 'STRUCT records))
 (define todos (type-filter 'TODO records))
 (new-cafe)
