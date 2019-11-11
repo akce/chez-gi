@@ -143,7 +143,7 @@
      (g-type-info-get-tag ptr)		; The actual type that this TYPE record contains.
      (g-type-info-pointer? ptr)
      (case (g-type-info-get-tag ptr)
-       [(INTERFACE)
+       [INTERFACE
         ;; TODO "make" -> make-interface
         ;; TODO using make exhausts memory (cyclic ref?) so leave till i understand what an interface is..
         (make-unhandled (g-type-info-get-interface ptr))]
@@ -189,15 +189,15 @@
 (define get-factory-func
   (lambda (ptr)
     (case (g-base-info-get-type ptr)
-      [(CONSTANT)	make-const]
+      [CONSTANT		make-const]
       [(ENUM FLAGS)	make-enum-flags]
-      [(FIELD)		make-field]
-      [(INTERFACE)	make-interface]
+      [FIELD		make-field]
+      [INTERFACE	make-interface]
       [PROPERTY		make-property]
       [SIGNAL		make-signal]
-      [(STRUCT)		make-struct]
-      [(TYPE)		make-type]
-      [(VALUE)		make-value]
+      [STRUCT		make-struct]
+      [TYPE		make-type]
+      [VALUE		make-value]
       [else		make-unhandled])))
 
 (let ([args (command-line-arguments)])
