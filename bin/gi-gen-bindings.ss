@@ -124,6 +124,16 @@
      (get-n ptr g-interface-info-get-n-constants g-interface-info-get-constant)
      (make (g-interface-info-get-iface-struct ptr)))))
 
+(define make-property
+  (lambda (ptr)
+    (assert (eq? 'PROPERTY (g-base-info-get-type ptr)))
+    (list
+     (g-base-info-get-type ptr)
+     (g-base-info-get-name ptr)
+     (g-property-info-get-flags ptr)
+     (g-property-info-get-ownership-transfer ptr)
+     (make (g-property-info-get-type ptr)))))
+
 (define make-type
   (lambda (ptr)
     (assert (eq? 'TYPE (g-base-info-get-type ptr)))
@@ -183,6 +193,7 @@
       [(ENUM FLAGS)	make-enum-flags]
       [(FIELD)		make-field]
       [(INTERFACE)	make-interface]
+      [PROPERTY		make-property]
       [SIGNAL		make-signal]
       [(STRUCT)		make-struct]
       [(TYPE)		make-type]
