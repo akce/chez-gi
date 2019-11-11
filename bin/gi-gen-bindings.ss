@@ -124,6 +124,26 @@
      (get-n ptr g-interface-info-get-n-constants g-interface-info-get-constant)
      (make (g-interface-info-get-iface-struct ptr)))))
 
+(define make-object
+  (lambda (ptr)
+    (assert (eq? 'OBJECT (g-base-info-get-type ptr)))
+    (list
+     (g-base-info-get-type ptr)
+     (g-base-info-get-name ptr)
+     (g-object-info-get-abstract ptr)
+     (g-object-info-get-fundamental ptr)
+     (make (g-object-info-get-parent ptr))
+     (g-object-info-get-type-name ptr)	; Includes lib prefix. eg, VBox -> GtkVBox.
+     (g-object-info-get-type-init ptr)
+     (get-n ptr g-object-info-get-n-constants g-object-info-get-constant)
+     (get-n ptr g-object-info-get-n-fields g-object-info-get-field)
+     (get-n ptr g-object-info-get-n-interfaces g-object-info-get-interface)
+     (get-n ptr g-object-info-get-n-methods g-object-info-get-method)
+     (get-n ptr g-object-info-get-n-properties g-object-info-get-property)
+     (get-n ptr g-object-info-get-n-signals g-object-info-get-signal)
+     (get-n ptr g-object-info-get-n-vfuncs g-object-info-get-vfunc)
+     (make (g-object-info-get-class-struct ptr)))))
+
 (define make-property
   (lambda (ptr)
     (assert (eq? 'PROPERTY (g-base-info-get-type ptr)))
@@ -193,6 +213,7 @@
       [(ENUM FLAGS)	make-enum-flags]
       [FIELD		make-field]
       [INTERFACE	make-interface]
+      [OBJECT		make-object]
       [PROPERTY		make-property]
       [SIGNAL		make-signal]
       [STRUCT		make-struct]
@@ -216,6 +237,7 @@
 (define enums (type-filter 'ENUM records))
 (define flags (type-filter 'FLAGS records))
 (define interfaces (type-filter 'INTERFACE records))
+(define objects (type-filter 'OBJECT records))
 (define structs (type-filter 'STRUCT records))
 (define todos (type-filter 'TODO records))
 (new-cafe)
