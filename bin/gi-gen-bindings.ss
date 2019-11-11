@@ -68,6 +68,16 @@
      ;; TODO get value
      )))
 
+(define make-signal
+  (lambda (ptr)
+    (assert (eq? 'SIGNAL (g-base-info-get-type ptr)))
+    (list
+     (g-base-info-get-type ptr)
+     (g-base-info-get-name ptr)
+     (g-signal-info-get-flags ptr)
+     (make (g-signal-info-get-class-closure ptr))
+     (g-signal-info-true-stops-emit? ptr))))
+
 (define make-struct
   (lambda (ptr)
     (assert (eq? 'STRUCT (g-base-info-get-type ptr)))
@@ -112,10 +122,7 @@
      (get-n ptr g-interface-info-get-n-signals g-interface-info-get-signal)
      (get-n ptr g-interface-info-get-n-vfuncs g-interface-info-get-vfunc)
      (get-n ptr g-interface-info-get-n-constants g-interface-info-get-constant)
-     (let ([sptr (g-interface-info-get-iface-struct ptr)])
-       (if (fx=? sptr 0)
-         '()
-         (make sptr))))))
+     (make (g-interface-info-get-iface-struct ptr)))))
 
 (define make-type
   (lambda (ptr)
@@ -163,7 +170,11 @@
 ;; TODO handle circular refs.
 (define make
   (lambda (ptr)
-    ((get-factory-func ptr) ptr)))
+    (if (fx=? ptr 0)
+      'NULL
+      (let ([x ((get-factory-func ptr) ptr)])
+        #;(pretty-print x)
+        x))))
 
 (define get-factory-func
   (lambda (ptr)
@@ -172,6 +183,7 @@
       [(ENUM FLAGS)	make-enum-flags]
       [(FIELD)		make-field]
       [(INTERFACE)	make-interface]
+      [SIGNAL		make-signal]
       [(STRUCT)		make-struct]
       [(TYPE)		make-type]
       [(VALUE)		make-value]
@@ -187,6 +199,7 @@
 (g-irepository-require (lib-name) (lib-version))
 (print-deps)
 ;; Create some debug test vars here.
+#;(define records (map (lambda (x) (display "TOPLEVEL")(newline)(make x)) (get-ptrs)))
 (define records (map make (get-ptrs)))
 (define consts (type-filter 'CONSTANT records))
 (define enums (type-filter 'ENUM records))
