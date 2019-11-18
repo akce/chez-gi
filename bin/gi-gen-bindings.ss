@@ -16,7 +16,7 @@
 
 (define print-usage
   (lambda ()
-    (format #t "Usage: ~a <path-to-typelib>~n" (car (command-line)))))
+    (format #t "Usage: ~a lib-name [lib-version]~n" (car (command-line)))))
 
 (define print-deps
   (lambda ()
