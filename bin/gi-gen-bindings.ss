@@ -246,7 +246,7 @@
              (g-type-info-get-array-fixed-size ptr)
              (g-type-info-zero-terminated? ptr))]
            [else
-            (list ptr)]))]
+            '()]))]
        [else
         'ATOM]))))
 
@@ -271,6 +271,10 @@
       'NULL
       (let ([x ((get-factory-func ptr) ptr)])
         #;(pretty-print x)
+        ;; Only TODO (unhandled) items keep the ptr so that they can be experimented on.
+        ;; All other types are freed.
+        (unless (eq? 'TODO (car x))
+          (g-base-info-unref ptr))
         x))))
 
 (define get-factory-func
