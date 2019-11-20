@@ -58,6 +58,24 @@
      (g-callable-info-may-return-null? ptr)
      (g-callable-info-skip-return? ptr))))
 
+(define make-arg
+  (lambda (ptr)
+    (assert (eq? 'ARG (g-base-info-get-type ptr)))
+    (list
+     (g-base-info-get-type ptr)
+     (g-base-info-get-name ptr)
+     (make (g-arg-info-get-type ptr))
+     (g-arg-info-get-closure ptr)	; CALLBACK only
+     (g-arg-info-get-destroy ptr)	; CALLBACK only
+     (g-arg-info-get-direction ptr)
+     (g-arg-info-get-ownership-transfer ptr)
+     (g-arg-info-get-scope ptr)
+     (g-arg-info-may-be-null? ptr)
+     (g-arg-info-caller-allocates? ptr)
+     (g-arg-info-optional? ptr)
+     (g-arg-info-return-value? ptr)
+     (g-arg-info-skip? ptr))))
+
 ;; consts: (list '(name-string value) ...)
 (define make-const
   (lambda (ptr)
@@ -241,6 +259,7 @@
 (define get-factory-func
   (lambda (ptr)
     (case (g-base-info-get-type ptr)
+      [ARG		make-arg]
       [CONSTANT		make-const]
       [(ENUM FLAGS)	make-enum-flags]
       [FIELD		make-field]
