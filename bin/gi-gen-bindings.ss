@@ -110,6 +110,27 @@
      (g-field-info-get-size ptr)
      (make (g-field-info-get-type ptr)))))
 
+(define make-function
+  (lambda (ptr)
+    (assert (eq? 'FUNCTION (g-base-info-get-type ptr)))
+    (let ([flags (g-function-info-get-flags ptr)])
+      (list
+       (g-base-info-get-type ptr)
+       (g-base-info-get-name ptr)
+       ;; TODO get callable info.
+       flags
+       (cond
+        [(or (memq 'GETTER flags) (memq 'SETTER flags))
+         (make-unhandled (g-function-info-get-property ptr))]
+        [else
+         '()])
+       (g-function-info-get-symbol ptr)	; Exported C symbol name.
+       (cond
+        [(memq 'WRAPS_VFUNC flags)
+         (make-unhandled (g-function-info-get-vfunc ptr))]
+        [else
+         '()])))))
+
 (define make-interface
   (lambda (ptr)
     (assert (eq? 'INTERFACE (g-base-info-get-type ptr)))
@@ -212,6 +233,7 @@
       [CONSTANT		make-const]
       [(ENUM FLAGS)	make-enum-flags]
       [FIELD		make-field]
+      [FUNCTION		make-function]
       [INTERFACE	make-interface]
       [OBJECT		make-object]
       [PROPERTY		make-property]
@@ -236,6 +258,7 @@
 (define consts (type-filter 'CONSTANT records))
 (define enums (type-filter 'ENUM records))
 (define flags (type-filter 'FLAGS records))
+(define funcs (type-filter 'FUNCTION records))
 (define interfaces (type-filter 'INTERFACE records))
 (define objects (type-filter 'OBJECT records))
 (define structs (type-filter 'STRUCT records))
