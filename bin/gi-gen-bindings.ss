@@ -76,6 +76,14 @@
      (g-arg-info-return-value? ptr)
      (g-arg-info-skip? ptr))))
 
+(define make-callback
+  (lambda (ptr)
+    (assert (eq? 'CALLBACK (g-base-info-get-type ptr)))
+    (list
+     (g-base-info-get-type ptr)
+     (g-base-info-get-name ptr)
+     (get-callable-info ptr))))
+
 ;; consts: (list '(name-string value) ...)
 (define make-const
   (lambda (ptr)
@@ -260,6 +268,7 @@
   (lambda (ptr)
     (case (g-base-info-get-type ptr)
       [ARG		make-arg]
+      [CALLBACK		make-callback]
       [CONSTANT		make-const]
       [(ENUM FLAGS)	make-enum-flags]
       [FIELD		make-field]
@@ -285,6 +294,7 @@
 ;; Create some debug test vars here.
 #;(define records (map (lambda (x) (display "TOPLEVEL")(newline)(make x)) (get-ptrs)))
 (define records (map make (get-ptrs)))
+(define callbacks (type-filter 'CALLBACK records))
 (define consts (type-filter 'CONSTANT records))
 (define enums (type-filter 'ENUM records))
 (define flags (type-filter 'FLAGS records))
