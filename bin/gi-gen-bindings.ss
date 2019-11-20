@@ -136,6 +136,19 @@
      (g-base-info-get-name ptr)
      (g-value-info-get-value ptr))))
 
+(define make-vfunc
+  (lambda (ptr)
+    (assert (eq? 'VFUNC (g-base-info-get-type ptr)))
+    (list
+     (g-base-info-get-type ptr)
+     (g-base-info-get-name ptr)
+     (get-callable-info ptr)
+     (g-vfunc-info-get-flags ptr)
+     (g-vfunc-info-get-offset ptr)
+     (g-vfunc-info-get-signal ptr)
+     (make (g-vfunc-info-get-invoker ptr))
+     #;(g-vfunc-info-get-address ptr))))
+
 (define make-field
   (lambda (ptr)
     (assert (eq? 'FIELD (g-base-info-get-type ptr)))
@@ -164,7 +177,7 @@
        (g-function-info-get-symbol ptr)	; Exported C symbol name.
        (cond
         [(memq 'WRAPS_VFUNC flags)
-         (make-unhandled (g-function-info-get-vfunc ptr))]
+         (make (g-function-info-get-vfunc ptr))]
         [else
          '()])))))
 
@@ -280,6 +293,7 @@
       [STRUCT		make-struct]
       [TYPE		make-type]
       [VALUE		make-value]
+      [VFUNC		make-vfunc]
       [else		make-unhandled])))
 
 (let ([args (command-line-arguments)])
