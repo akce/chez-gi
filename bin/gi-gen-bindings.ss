@@ -99,11 +99,8 @@
      (g-base-info-get-type ptr)
      (g-base-info-get-name ptr)
      (get-n ptr g-enum-info-get-n-values g-enum-info-get-value)
-     ;; TODO methods
-     ;; TODO storage type
-     ;; TODO error domain
-     ;; TODO get value
-     )))
+     (get-n ptr g-enum-info-get-n-methods g-enum-info-get-method)
+     (g-enum-info-get-storage-type ptr))))
 
 (define make-signal
   (lambda (ptr)
