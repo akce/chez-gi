@@ -237,7 +237,6 @@
        [ARRAY
         (append
          (list (g-type-info-get-array-type ptr))
-         ;; TODO integrate these into "make"?
          (case (g-type-info-get-array-type ptr)
            [(C ARRAY PTR_ARRAY BYTE_ARRAY)
             (list
@@ -264,7 +263,6 @@
      (g-base-info-get-name ptr)
      ptr)))
 
-;; TODO handle circular refs.
 (define make
   (lambda (ptr)
     (if (fx=? ptr 0)
