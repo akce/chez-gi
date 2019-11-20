@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GITypeInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi type)
+(library (gi c type)
   (export
    gitype
    GIArrayType
@@ -16,8 +16,8 @@
    g-type-info-get-array-type)
   (import
    (rnrs)
-   (gi base)
-   (gi ftypes-util))
+   (gi c base)
+   (gi c ftypes-util))
 
   (define load-library
     (load-shared-object "libgirepository-1.0.so.1"))

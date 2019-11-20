@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIFieldInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi field)
+(library (gi c field)
   (export
    gifield
    GIFieldInfoFlags
@@ -13,9 +13,9 @@
    g-field-info-get-type)
   (import
    (rnrs)
-   (gi arg)
-   (gi type)
-   (gi ftypes-util))
+   (gi c arg)
+   (gi c type)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

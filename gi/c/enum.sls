@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIEnumInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi enum)
+(library (gi c enum)
   (export
    gienum givalue
    g-enum-info-get-n-values
@@ -13,9 +13,9 @@
    g-value-info-get-value)
   (import
    (rnrs)
-   (gi callable)
-   (gi type)
-   (gi ftypes-util))
+   (gi c callable)
+   (gi c type)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

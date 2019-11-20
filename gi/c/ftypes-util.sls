@@ -1,6 +1,6 @@
 ;; ftypes util functions chez scheme.
 ;; Copyright (c) 2019 Akce.
-(library (gi ftypes-util)
+(library (gi c ftypes-util)
   (export
    lso
    u8 u8* u8**

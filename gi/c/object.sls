@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIObjectInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi object)
+(library (gi c object)
   (export
    giobject giobjectreffunction giobjectunreffunction giobjectsetvaluefunction giobjectgetvaluefunction
    g-object-info-get-abstract
@@ -38,14 +38,14 @@
    g-object-info-get-get-value-function-pointer)
   (import
    (rnrs)
-   (gi callable)
-   (gi constant)
-   (gi field)
-   (gi interface)
-   (gi property)
-   (gi struct)
-   (gi type)
-   (gi ftypes-util))
+   (gi c callable)
+   (gi c constant)
+   (gi c field)
+   (gi c interface)
+   (gi c property)
+   (gi c struct)
+   (gi c type)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

@@ -5,7 +5,7 @@
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
 
-(library (gi base)
+(library (gi c base)
   (export
    gibase gitypelib GIInfoType
    g-base-info-ref
@@ -19,7 +19,7 @@
    g-info-type-to-string)
   (import
    (rnrs)
-   (gi ftypes-util))
+   (gi c ftypes-util))
 
   (define load-library
     (load-shared-object "libgirepository-1.0.so.1"))

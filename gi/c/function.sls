@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIFunctionInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi function)
+(library (gi c function)
   (export
    GIFunctionFlags
    g-function-info-get-flags
@@ -10,9 +10,9 @@
    )
   (import
    (rnrs)
-   (gi callable)
-   (gi property)
-   (gi ftypes-util))
+   (gi c callable)
+   (gi c property)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

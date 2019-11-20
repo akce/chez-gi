@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIInterfaceInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi interface)
+(library (gi c interface)
   (export
    giinterface
    g-interface-info-get-n-prerequisites
@@ -22,13 +22,13 @@
    g-interface-info-get-iface-struct)
   (import
    (rnrs)
-   (gi base)
-   (gi callable)
-   (gi constant)
-   (gi property)
-   (gi signal)
-   (gi struct)
-   (gi ftypes-util))
+   (gi c base)
+   (gi c callable)
+   (gi c constant)
+   (gi c property)
+   (gi c signal)
+   (gi c struct)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

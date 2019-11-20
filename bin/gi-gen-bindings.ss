@@ -6,7 +6,7 @@
 
 (import
  (chezscheme)
- (gi))
+ (gi c))
 
 (define lib-name
   (make-parameter #f))

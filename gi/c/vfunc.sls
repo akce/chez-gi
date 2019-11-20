@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIVFuncInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi vfunc)
+(library (gi c vfunc)
   (export
    GIVFuncFlags
    g-vfunc-info-get-flags
@@ -11,10 +11,10 @@
    g-vfunc-info-get-address)
   (import
    (rnrs)
-   (gi callable)
-   (gi glib)
-   (gi signal)
-   (gi ftypes-util))
+   (gi c callable)
+   (gi c glib)
+   (gi c signal)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

@@ -5,7 +5,7 @@
 ;; Written by Akce 2019.
 ;;
 ;; SPDX-License-Identifier: Unlicense
-(library (gi callable)
+(library (gi c callable)
   (export
    gicallable gifunction gisignal givfunc
    g-callable-info-can-throw-gerror
@@ -21,9 +21,9 @@
     (g-callable-info-skip-return g-callable-info-skip-return?)))
   (import
    (rnrs)
-   (gi arg)
-   (gi type)
-   (gi ftypes-util))
+   (gi c arg)
+   (gi c type)
+   (gi c ftypes-util))
 
   (define load-library
     (load-shared-object "libgirepository-1.0.so.1"))

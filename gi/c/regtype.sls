@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIRegisteredTypeInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi regtype)
+(library (gi c regtype)
   (export
    giregtype
    g-registered-type-info-get-type-name
@@ -9,8 +9,8 @@
    g-registered-type-info-get-g-type)
   (import
    (rnrs)
-   (gi glib)
-   (gi ftypes-util))
+   (gi c glib)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

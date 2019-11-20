@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIUnionInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi union)
+(library (gi c union)
   (export
    giunion
    g-union-info-get-n-fields
@@ -17,11 +17,11 @@
    g-union-info-get-alignment)
   (import
    (rnrs)
-   (gi callable)
-   (gi constant)
-   (gi field)
-   (gi type)
-   (gi ftypes-util))
+   (gi c callable)
+   (gi c constant)
+   (gi c field)
+   (gi c type)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

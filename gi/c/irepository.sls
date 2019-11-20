@@ -6,7 +6,7 @@
 ;;
 ;; Written by Akce 2019.
 
-(library (gi irepository)
+(library (gi c irepository)
   (export
    g-irepository-get-default
    current-irepository
@@ -26,9 +26,9 @@
   (import
    (rnrs)
    (only (chezscheme) foreign-set! make-parameter)
-   (gi ftypes-util)
-   (gi base)
-   (gi glib))
+   (gi c ftypes-util)
+   (gi c base)
+   (gi c glib))
 
   (define load-library
     (lso))

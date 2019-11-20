@@ -1,16 +1,16 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIConstantInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi constant)
+(library (gi c constant)
   (export
    giconstant
    g-constant-get-value)
   (import
    (rnrs)
    (only (chezscheme) format)
-   (gi base)
-   (gi type)
-   (gi ftypes-util))
+   (gi c base)
+   (gi c type)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

@@ -1,4 +1,4 @@
-(library (gi glib)
+(library (gi c glib)
   (export
    gquark
    gerror gerror*
@@ -9,7 +9,7 @@
    g-error-free)
   (import
    (chezscheme)
-   (gi ftypes-util))
+   (gi c ftypes-util))
 
   (define load-lib
     (load-shared-object "libglib-2.0.so"))

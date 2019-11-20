@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GISignalInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi signal)
+(library (gi c signal)
   (export
    GSignalFlags
    g-signal-info-get-flags
@@ -9,8 +9,8 @@
    (rename (g-signal-info-true-stops-emit g-signal-info-true-stops-emit?)))
   (import
    (rnrs)
-   (gi callable)
-   (gi ftypes-util))
+   (gi c callable)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

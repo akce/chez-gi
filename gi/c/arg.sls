@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIArgInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi arg)
+(library (gi c arg)
   (export
    giarg
    GIDirection
@@ -21,8 +21,8 @@
     (g-arg-info-is-skip g-arg-info-skip?)))
   (import
    (rnrs)
-   (gi type)
-   (gi ftypes-util))
+   (gi c type)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))

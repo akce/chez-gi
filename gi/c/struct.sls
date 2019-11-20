@@ -1,7 +1,7 @@
 ;; https://developer.gnome.org/gi/stable/gi-GIStructInfo.html
 ;; Written by Akce 2019.
 ;; SPDX-License-Identifier: Unlicense
-(library (gi struct)
+(library (gi c struct)
   (export
    gistruct
    g-struct-info-find-field
@@ -15,10 +15,10 @@
    g-struct-info-find-method)
   (import
    (rnrs)
-   (gi callable)
-   (gi field)
-   (gi glib)
-   (gi ftypes-util))
+   (gi c callable)
+   (gi c field)
+   (gi c glib)
+   (gi c ftypes-util))
 
   (define load-library
     (lso))
