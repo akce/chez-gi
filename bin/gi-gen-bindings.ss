@@ -47,6 +47,17 @@
   (lambda (sym records)
     (filter (lambda (x) (eq? sym (car x))) records)))
 
+(define get-callable-info
+  (lambda (ptr)
+    (list
+     (get-n ptr g-callable-info-get-n-args g-callable-info-get-arg)
+     (g-callable-info-get-caller-owns ptr)
+     (g-callable-info-get-instance-ownership-transfer ptr)
+     (make (g-callable-info-get-return-type ptr))
+     (g-callable-info-method? ptr)
+     (g-callable-info-may-return-null? ptr)
+     (g-callable-info-skip-return? ptr))))
+
 ;; consts: (list '(name-string value) ...)
 (define make-const
   (lambda (ptr)
@@ -117,7 +128,7 @@
       (list
        (g-base-info-get-type ptr)
        (g-base-info-get-name ptr)
-       ;; TODO get callable info.
+       (get-callable-info ptr)
        flags
        (cond
         [(or (memq 'GETTER flags) (memq 'SETTER flags))
