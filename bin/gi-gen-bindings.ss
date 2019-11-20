@@ -122,8 +122,7 @@
      (g-struct-info-get-alignment ptr)
      (g-struct-info-is-gtype-struct ptr)
      (get-n ptr g-struct-info-get-n-fields g-struct-info-get-field)
-     ;; TODO methods
-     #;(struct-methods ptr))))
+     (get-n ptr g-struct-info-get-n-methods g-struct-info-get-method))))
 
 (define make-value
   (lambda (ptr)
