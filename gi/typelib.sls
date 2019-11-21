@@ -11,7 +11,27 @@
   (export
    load-typelib typelib-version typelib-dependencies typelib-records
    type-filter
-   )
+   base? base-type base-name
+   callable? callable-args callable-caller-owns callable-instance-ownership-transfer callable-return-type
+   callable-method callable-may-return-null callable-skip-return
+   arg? arg-type arg-closure arg-destroy arg-direction arg-ownership-transfer arg-scope arg-may-be-null
+   arg-caller-allocates arg-optional arg-return-value arg-skip
+   callback?
+   const? const-value
+   enum-flags? enum-flags-values enum-flags-methods enum-flags-storage-type
+   field? field-flags field-offset field-size field-type
+   function? function-flags function-property function-symbol function-vfunc
+   interface? interface-prerequisites interface-properties interface-methods interface-signals interface-vfuncs
+   interface-constants interface-iface-struct
+   object? object-abstract object-fundamental object-parent object-type-name object-type-init object-constants
+   object-fields object-interfaces object-methods object-properties object-signals object-vfuncs object-class-struct
+   property? property-flags property-ownership-transfer property-type
+   signal? signal-flags signal-class-closure signal-true-stops-emit
+   struct? struct-size struct-alignment struct-is-gtype-struct struct-fields struct-methods
+   type? type-tag type-pointer type-interface type-array
+   subtype-array? subtype-array-type subtype-array-length subtype-array-fixed-size subtype-array-zero-terminated
+   value? value-value
+   vfunc? vfunc-flags vfunc-offset vfunc-signal vfunc-invoker)
   (import
    (chezscheme)
    (gi c))
