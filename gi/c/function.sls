@@ -7,7 +7,7 @@
    g-function-info-get-flags
    g-function-info-get-property
    g-function-info-get-symbol
-   )
+   g-function-info-get-vfunc)
   (import
    (rnrs)
    (gi c callable)

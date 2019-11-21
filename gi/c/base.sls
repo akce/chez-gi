@@ -10,7 +10,7 @@
    gibase gitypelib GIInfoType
    g-base-info-ref
    g-base-info-unref
-   g-base-info-equal
+   (rename (g-base-info-equal g-base-info-equal?))
    g-base-info-get-type
    g-base-info-get-typelib
    g-base-info-get-namespace
@@ -22,7 +22,7 @@
    (gi c ftypes-util))
 
   (define load-library
-    (load-shared-object "libgirepository-1.0.so.1"))
+    (lso))
 
   (define-ftype gibase void*)
   (define-ftype gitypelib void*)
